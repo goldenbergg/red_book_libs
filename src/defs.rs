@@ -19,7 +19,7 @@ pub enum Squares {
     A5 = 61, B5, C5, D5, E5, F5, G5, H5,
     A6 = 71, B6, C6, D6, E6, F6, G6, H6,
     A7 = 81, B7, C7, D7, E7, F7, G7, H7,
-    A8 = 91, B8, C8, D8, E8, F8, G8, H8, NoSq
+    A8 = 91, B8, C8, D8, E8, F8, G8, H8, NoSq, Offboard
 }
 
 pub enum TF { False, True }
@@ -63,6 +63,12 @@ pub fn sq64(sq120: usize) -> i32 {
     }
 }
 
+pub fn sq120(sq64: usize) -> i32 {
+    unsafe {
+        SQ64_TO_SQ120[sq64]
+    }
+}
+
 pub fn pop(b: *mut u64) -> i32 {
     bitboards::pop_bit(b)
 }
@@ -87,3 +93,6 @@ pub static mut SQ120_TO_SQ64: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usi
 pub static mut SQ64_TO_SQ120: [i32; 64] = [0; 64];
 pub static mut SET_MASK: [u64; 64] = [0u64; 64];
 pub static mut CLEAR_MASK: [u64; 64] = [0u64; 64];
+pub static mut PIECE_KEYS: [[u64; 120] ; 13] = [[0u64; 120]; 13];
+pub static mut SIDE_KEY: u64 = 0;
+pub static mut CASTLE_KEYS: [u64; 16] = [0u64; 16];
