@@ -1,4 +1,6 @@
 // defs.rs
+use crate::bitboards;
+
 pub const NAME: &str = "Red Book 1.0";
 pub const BRD_SQ_NUM: i32 = 120;
 pub const MAXGAMEMOVES: i32 = 2048;
@@ -48,11 +50,40 @@ pub struct SBoard {
     pub maj_pce: [i32; 3],
     pub min_pce: [i32; 3],
     pub history: [SUndo; MAXGAMEMOVES as usize],
+    pub p_list: [[i32; 10] ; 13],
 }
 
 pub fn fr2_sq(f: i32, r: i32) -> i32 {
     (21 + f) + (r * 10)
 }
 
+pub fn sq64(sq120: usize) -> i32 {
+    unsafe {
+        SQ120_TO_SQ64[sq120]
+    }
+}
+
+pub fn pop(b: *mut u64) -> i32 {
+    bitboards::pop_bit(b)
+}
+
+pub fn cnt(b: u64) -> i32 {
+    bitboards::count_bits(b)
+}
+
+pub fn clrbit(bb: *mut u64, sq: i32) {
+    unsafe {
+        *bb &= CLEAR_MASK[(sq as usize)];
+    }
+}
+
+pub fn setbit(bb: *mut u64, sq: i32) {
+    unsafe {
+        *bb |= SET_MASK[(sq as usize)];
+    }
+}
+
 pub static mut SQ120_TO_SQ64: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
 pub static mut SQ64_TO_SQ120: [i32; 64] = [0; 64];
+pub static mut SET_MASK: [u64; 64] = [0u64; 64];
+pub static mut CLEAR_MASK: [u64; 64] = [0u64; 64];
