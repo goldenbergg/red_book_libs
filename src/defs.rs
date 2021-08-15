@@ -4,6 +4,7 @@ use crate::bitboards;
 pub const NAME: &str = "Red Book 1.0";
 pub const BRD_SQ_NUM: i32 = 120;
 pub const MAXGAMEMOVES: i32 = 2048;
+pub const START_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 pub enum Pieces { EMPTY, WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK }
 pub enum File { FileA, FileB, FileC, FileD, FileE, FileF, FileG, FileH, FileNone }
@@ -49,8 +50,8 @@ pub struct SBoard {
     pub big_pce: [i32; 3],
     pub maj_pce: [i32; 3],
     pub min_pce: [i32; 3],
-    pub history: [SUndo; MAXGAMEMOVES as usize],
-    pub p_list: [[i32; 10] ; 13],
+    //pub history: [SUndo; MAXGAMEMOVES as usize],
+    //pub p_list: [[i32; 10] ; 13],
 }
 
 pub fn fr2_sq(f: i32, r: i32) -> i32 {
@@ -96,3 +97,7 @@ pub static mut CLEAR_MASK: [u64; 64] = [0u64; 64];
 pub static mut PIECE_KEYS: [[u64; 120] ; 13] = [[0u64; 120]; 13];
 pub static mut SIDE_KEY: u64 = 0;
 pub static mut CASTLE_KEYS: [u64; 16] = [0u64; 16];
+pub static mut PCE_CHAR: &str = ".PNBRQKpnbrqk";
+pub static mut SIDE_CHAR: &str = "wb-";
+pub static mut RANK_CHAR: &str = "12345678";
+pub static mut FILE_CHAR: &str = "abcdefgh";
