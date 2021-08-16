@@ -98,12 +98,17 @@ pub static mut CLEAR_MASK: [u64; 64] = [0u64; 64];
 pub static mut PIECE_KEYS: [[u64; 120] ; 13] = [[0u64; 120]; 13];
 pub static mut SIDE_KEY: u64 = 0;
 pub static mut CASTLE_KEYS: [u64; 16] = [0u64; 16];
+
 pub static mut PCE_CHAR: &str = ".PNBRQKpnbrqk";
 pub static mut SIDE_CHAR: &str = "wb-";
 pub static mut RANK_CHAR: &str = "12345678";
 pub static mut FILE_CHAR: &str = "abcdefgh";
+
 pub static mut PIECE_BIG: [i32; 13] = [ 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 ];
 pub static mut PIECE_MAJ: [i32; 13] = [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1 ];
 pub static mut PIECE_MIN: [i32; 13] = [ 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0 ];
 pub static mut PIECE_VAL: [i32; 13] = [ 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000 ];
 pub static mut PIECE_COL: [i32; 13] = [ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ];
+
+pub static mut FILES_BRD: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
+pub static mut RANKS_BRD: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
