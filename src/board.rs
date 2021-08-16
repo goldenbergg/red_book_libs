@@ -2,7 +2,7 @@
 use crate::defs;
 use crate::hashkeys;
 
-pub fn update_list_mterials(pos: *mut defs::SBoard) {
+pub fn update_list_material(pos: *mut defs::SBoard) {
     let mut piece: i32;
     let mut sq: i32;
     let mut index: i32;
