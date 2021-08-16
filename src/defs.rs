@@ -47,11 +47,12 @@ pub struct SBoard {
     pub castle_perm: i32,
     pub pos_key: u64,
     pub pce_num: [i32; 13],
-    pub big_pce: [i32; 3],
-    pub maj_pce: [i32; 3],
-    pub min_pce: [i32; 3],
+    pub big_pce: [i32; 2],
+    pub maj_pce: [i32; 2],
+    pub min_pce: [i32; 2],
+    pub material: [i32; 2],
     //pub history: [SUndo; MAXGAMEMOVES as usize],
-    //pub p_list: [[i32; 10] ; 13],
+    pub p_list: [[i32; 10] ; 13],
 }
 
 pub fn fr2_sq(f: i32, r: i32) -> i32 {
@@ -101,3 +102,8 @@ pub static mut PCE_CHAR: &str = ".PNBRQKpnbrqk";
 pub static mut SIDE_CHAR: &str = "wb-";
 pub static mut RANK_CHAR: &str = "12345678";
 pub static mut FILE_CHAR: &str = "abcdefgh";
+pub static mut PIECE_BIG: [i32; 13] = [ 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 ];
+pub static mut PIECE_MAJ: [i32; 13] = [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1 ];
+pub static mut PIECE_MIN: [i32; 13] = [ 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0 ];
+pub static mut PIECE_VAL: [i32; 13] = [ 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000 ];
+pub static mut PIECE_COL: [i32; 13] = [ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ];

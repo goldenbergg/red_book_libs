@@ -2,6 +2,42 @@
 use crate::defs;
 use crate::hashkeys;
 
+pub fn update_list_mterials(pos: *mut defs::SBoard) {
+    let mut piece: i32;
+    let mut sq: i32;
+    let mut index: i32;
+    let mut color: i32;
+    index = 0i32;
+    while index < 120i32 {
+        sq = index;
+        unsafe { piece = (*pos).pieces[index as usize]; }
+        if (piece != (defs::Squares::Offboard as i32)) && (piece != (defs::Pieces::EMPTY as i32)) {
+            unsafe {
+                color = defs::PIECE_COL[piece as usize];
+                if defs::PIECE_BIG[piece as usize] == (defs::TF::True as i32) {
+                    (*pos).big_pce[color as usize] += 1;
+                }
+                if defs::PIECE_MIN[piece as usize] == (defs::TF::True as i32) {
+                    (*pos).min_pce[color as usize] += 1;
+                }
+                if defs::PIECE_MAJ[piece as usize] == (defs::TF::True as i32) {
+                    (*pos).maj_pce[color as usize] += 1;
+                }
+                (*pos).material[color as usize] += defs::PIECE_VAL[piece as usize];
+                (*pos).p_list[piece as usize][(*pos).pce_num[piece as usize] as usize] = sq;
+                (*pos).pce_num[piece as usize] += 1;
+                if piece == (defs::Pieces::WK as i32) {
+                    (*pos).king_sq[defs::Colors::White as usize] = sq;
+                }
+                if piece == (defs::Pieces::BK as i32) {
+                    (*pos).king_sq[defs::Colors::Black as usize] = sq;
+                }
+            }
+        }
+        index += 1;
+    }
+}
+
 pub fn parse_fen(fen: &str, pos: *mut defs::SBoard) -> i32 {
     //assert!(fen.is_empty() != true);
     let mut rank: i32 = defs::Rank::Rank8 as i32;
@@ -123,7 +159,7 @@ pub fn reset_board(pos: *mut defs::SBoard) {
         index += 1;
     }
     index = 0i32;
-    while index < 3i32 {
+    while index < 2i32 {
         unsafe {
             (*pos).big_pce[index as usize] = 0i32;
             (*pos).maj_pce[index as usize] = 0i32;
