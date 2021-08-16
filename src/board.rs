@@ -32,6 +32,14 @@ pub fn update_list_material(pos: *mut defs::SBoard) {
                 if piece == (defs::Pieces::BK as i32) {
                     (*pos).king_sq[defs::Colors::Black as usize] = sq;
                 }
+                if piece == (defs::Pieces::WP as i32) {
+                    defs::setbit(&mut (*pos).pawns[defs::Colors::White as usize], defs::sq64(sq as usize));
+                    defs::setbit(&mut (*pos).pawns[defs::Colors::Both as usize], defs::sq64(sq as usize));
+                }
+                else if piece == (defs::Pieces::BP as i32) {
+                    defs::setbit(&mut (*pos).pawns[defs::Colors::Black as usize], defs::sq64(sq as usize));
+                    defs::setbit(&mut (*pos).pawns[defs::Colors::Both as usize], defs::sq64(sq as usize));
+                }
             }
         }
         index += 1;
@@ -140,6 +148,7 @@ pub fn parse_fen(fen: &str, pos: *mut defs::SBoard) -> i32 {
         unsafe { (*pos).enpas = defs::fr2_sq(file, rank); }
     }
     unsafe { (*pos).pos_key = hashkeys::generate_pos_key(pos); }
+    update_list_material(pos);
     0
 }
 
