@@ -2,6 +2,96 @@
 use crate::defs;
 use crate::hashkeys;
 
+pub fn check_board(pos: *const defs::SBoard) -> i32 {
+    let mut t_pcenum: [i32; 13] = [0; 13];
+    let mut t_big_pce: [i32; 2] = [0; 2];
+    let mut t_maj_pce: [i32; 2] = [0; 2];
+    let mut t_min_pce: [i32; 2] = [0; 2];
+    let mut t_material: [i32; 2] = [0; 2];
+    let mut sq64: i32;
+    let mut t_piece: i32;
+    let mut t_pce_num: i32;
+    let mut sq120: i32;
+    let mut color: i32;
+    let mut pcount: i32;
+    let mut t_pawns: [u64; 3] = [0u64; 3];
+    unsafe {
+        t_pawns[(defs::Colors::White as i32) as usize] = (*pos).pawns[(defs::Colors::White as i32) as usize];
+        t_pawns[(defs::Colors::Black as i32) as usize] = (*pos).pawns[(defs::Colors::Black as i32) as usize];
+        t_pawns[(defs::Colors::Both as i32) as usize] = (*pos).pawns[(defs::Colors::Both as i32) as usize];
+    }
+    t_piece = defs::Pieces::WP as i32;
+    while t_piece <= (defs::Pieces::BK as i32) {
+        t_pce_num = 0;
+        unsafe {
+            while t_pce_num < (*pos).pce_num[t_piece as usize] {
+                sq120 = (*pos).p_list[t_piece as usize][t_pce_num as usize];
+                assert!((*pos).pieces[sq120 as usize] == t_piece);
+                t_pce_num += 1;
+            }
+        }
+        t_piece += 1;
+    }
+    sq64 = 0;
+    while sq64 < 64i32 {
+        sq120 = defs::sq120(sq64 as usize);
+        unsafe { t_piece = (*pos).pieces[sq120 as usize]; }
+        t_pcenum[t_piece as usize] += 1;
+        unsafe { 
+            color = defs::PIECE_COL[t_piece as usize];
+            if defs::PIECE_BIG[t_piece as usize] == (defs::TF::True as i32) {
+                t_big_pce[color as usize] += 1;
+            }
+            if defs::PIECE_MIN[t_piece as usize] == (defs::TF::True as i32) {
+                t_min_pce[color as usize] += 1;
+            }
+            if defs::PIECE_MAJ[t_piece as usize] == (defs::TF::True as i32) {
+                t_maj_pce[color as usize] += 1;
+            }
+            if color != (defs::Colors::Both as i32) {
+                t_material[color as usize] += defs::PIECE_VAL[t_piece as usize];
+            }
+            sq64 += 1;
+        }
+    }
+    t_piece = defs::Pieces::WP as i32;
+    while t_piece <= (defs::Pieces::BK as i32) {
+        unsafe { assert!(t_pcenum[t_piece as usize] == (*pos).pce_num[t_piece as usize]); }
+        t_piece += 1;
+    }
+    pcount = defs::cnt(t_pawns[(defs::Colors::White as i32) as usize]);
+    unsafe { assert!(pcount == (*pos).pce_num[(defs::Pieces::WP as i32) as usize]); }
+    pcount = defs::cnt(t_pawns[(defs::Colors::Black as i32) as usize]);
+    unsafe { assert!(pcount == (*pos).pce_num[(defs::Pieces::BP as i32) as usize]); }
+    pcount = defs::cnt(t_pawns[(defs::Colors::Both as i32) as usize]);
+    unsafe { assert!(pcount == ((*pos).pce_num[(defs::Pieces::WP as i32) as usize] + (*pos).pce_num[(defs::Pieces::BP as i32) as usize])); }
+    while t_pawns[defs::Colors::White as i32 as usize] > 0u64 {
+        sq64 = defs::pop(&mut t_pawns[defs::Colors::White as i32 as usize]);
+        unsafe { assert!((*pos).pieces[defs::sq120(sq64 as usize) as usize] == (defs::Pieces::WP as i32)); }
+    }
+    while t_pawns[defs::Colors::Black as i32 as usize] > 0u64 {
+        sq64 = defs::pop(&mut t_pawns[defs::Colors::Black as i32 as usize]);
+        unsafe { assert!((*pos).pieces[defs::sq120(sq64 as usize) as usize] == (defs::Pieces::BP as i32)); }
+    }
+    while t_pawns[defs::Colors::Both as i32 as usize] > 0u64 {
+        sq64 = defs::pop(&mut t_pawns[defs::Colors::Both as i32 as usize]);
+        unsafe { assert!(((*pos).pieces[defs::sq120(sq64 as usize) as usize] == (defs::Pieces::BP as i32)) || ((*pos).pieces[defs::sq120(sq64 as usize) as usize] == (defs::Pieces::WP as i32))); }
+    }
+    unsafe {
+        assert!((t_material[defs::Colors::White as i32 as usize] == (*pos).material[defs::Colors::White as i32 as usize]) && (t_material[defs::Colors::Black as i32 as usize] == (*pos).material[defs::Colors::Black as i32 as usize]));
+        assert!((t_min_pce[defs::Colors::White as i32 as usize] == (*pos).min_pce[defs::Colors::White as i32 as usize]) && (t_min_pce[defs::Colors::Black as i32 as usize] == (*pos).min_pce[defs::Colors::Black as i32 as usize]));
+        assert!((t_maj_pce[defs::Colors::White as i32 as usize] == (*pos).maj_pce[defs::Colors::White as i32 as usize]) && (t_maj_pce[defs::Colors::Black as i32 as usize] == (*pos).maj_pce[defs::Colors::Black as i32 as usize]));
+        assert!((t_big_pce[defs::Colors::White as i32 as usize] == (*pos).big_pce[defs::Colors::White as i32 as usize]) && (t_big_pce[defs::Colors::Black as i32 as usize] == (*pos).big_pce[defs::Colors::Black as i32 as usize]));
+        assert!(((*pos).side == (defs::Colors::White as i32)) || ((*pos).side == (defs::Colors::Black as i32)));
+        assert!(hashkeys::generate_pos_key(pos) == (*pos).pos_key);
+        assert!(((*pos).enpas == (defs::Squares::NoSq as i32)) || ((defs::RANKS_BRD[(*pos).enpas as usize] == (defs::Rank::Rank6 as i32)) && ((*pos).side == (defs::Colors::White as i32))) 
+            || ((defs::RANKS_BRD[(*pos).enpas as usize] == (defs::Rank::Rank3 as i32)) && ((*pos).side == (defs::Colors::Black as i32))));
+        assert!((*pos).pieces[(*pos).king_sq[defs::Colors::White as i32 as usize] as usize] == (defs::Pieces::WK as i32));
+        assert!((*pos).pieces[(*pos).king_sq[defs::Colors::Black as i32 as usize] as usize] == (defs::Pieces::BK as i32));
+    }
+    defs::TF::True as i32
+}
+
 pub fn update_list_material(pos: *mut defs::SBoard) {
     let mut piece: i32;
     let mut sq: i32;
