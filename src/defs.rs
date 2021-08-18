@@ -91,6 +91,30 @@ pub fn setbit(bb: *mut u64, sq: i32) {
     }
 }
 
+pub fn is_bq(p: usize) -> i32 {
+    unsafe {
+        PIECE_BISHOP_QUEEN[p]
+    }
+}
+
+pub fn is_rq(p: usize) -> i32 {
+    unsafe {
+        PIECE_ROOK_QUEEN[p]
+    }
+}
+
+pub fn is_kn(p: usize) -> i32 {
+    unsafe {
+        PIECE_KNIGHT[p]
+    }
+}
+
+pub fn is_ki(p: usize) -> i32 {
+    unsafe {
+        PIECE_KING[p]
+    }
+}
+
 pub static mut SQ120_TO_SQ64: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
 pub static mut SQ64_TO_SQ120: [i32; 64] = [0; 64];
 pub static mut SET_MASK: [u64; 64] = [0u64; 64];
@@ -112,3 +136,8 @@ pub static mut PIECE_COL: [i32; 13] = [ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ];
 
 pub static mut FILES_BRD: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
 pub static mut RANKS_BRD: [i32; BRD_SQ_NUM as usize] = [0; BRD_SQ_NUM as usize];
+
+pub static mut PIECE_KNIGHT: [i32; 13] = [ 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 ];
+pub static mut PIECE_KING: [i32; 13] = [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ];
+pub static mut PIECE_ROOK_QUEEN: [i32; 13] = [ 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0 ];
+pub static mut PIECE_BISHOP_QUEEN: [i32; 13] = [ 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0 ];
