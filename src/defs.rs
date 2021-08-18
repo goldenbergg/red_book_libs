@@ -60,11 +60,11 @@ pub struct SBoard {
     pub p_list: [[i32; 10] ; 13],
 }
 pub fn from_sq(m: i32) -> i32 {
-    m & 0x3F
+    m & 0x7F
 }
 
 pub fn to_sq(m: i32) -> i32 {
-    (m >> 7) & 0x3F
+    (m >> 7) & 0x7F
 }
 
 pub fn captured(m: i32) -> i32 {
