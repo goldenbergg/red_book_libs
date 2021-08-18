@@ -27,6 +27,11 @@ pub enum TF { False, True }
 
 pub enum CastlePerm { WKCA = 1, WQCA = 2, BKCA = 4, BQCA = 8 }
 
+pub struct SMove {
+    pub pc_move: i32,
+    pub score: i32,
+}
+
 pub struct SUndo {
     pub pc_move: i32,
     pub castle_perm: i32,
@@ -54,6 +59,28 @@ pub struct SBoard {
     //pub history: [SUndo; MAXGAMEMOVES as usize],
     pub p_list: [[i32; 10] ; 13],
 }
+pub fn from_sq(m: i32) -> i32 {
+    m & 0x3F
+}
+
+pub fn to_sq(m: i32) -> i32 {
+    (m >> 7) & 0x3F
+}
+
+pub fn captured(m: i32) -> i32 {
+    (m >> 14) & 0xF
+}
+
+pub fn promoted(m: i32) -> i32 {
+    (m >> 20) & 0xF
+}
+
+pub const MFLAGEP: i32 = 0x40000;
+pub const MFLAGPS: i32 = 0x80000;
+pub const MFLAGCA: i32 = 0x1000000;
+
+pub const MFLAGCAP: i32 = 0x7C000;
+pub const MFLAGPROM: i32 = 0xF00000;
 
 pub fn fr2_sq(f: i32, r: i32) -> i32 {
     (21 + f) + (r * 10)
