@@ -146,7 +146,7 @@ pub fn generate_all_moves(pos: *const defs::SBoard, list: *mut defs::SMoveList) 
         let mut pce_index: i32;
         println!();
         println!();
-        println!("Side: {}", side);
+        //println!("Side: {}", side);
         if side == (defs::Colors::White as i32) {
             pce_num = 0i32;
             while pce_num < (*pos).pce_num[defs::Pieces::WP as i32 as usize] {
