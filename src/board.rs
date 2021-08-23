@@ -263,6 +263,7 @@ pub fn reset_board(pos: *mut defs::SBoard) {
             (*pos).big_pce[index as usize] = 0i32;
             (*pos).maj_pce[index as usize] = 0i32;
             (*pos).min_pce[index as usize] = 0i32;
+            (*pos).material[index as usize] = 0i32;
             (*pos).pawns[index as usize] = 0u64;
         }
         index += 1;

@@ -6,3 +6,5 @@ pub mod defs;
 pub mod hashkeys;
 pub mod init;
 pub mod io;
+pub mod movegen;
+pub mod validate;

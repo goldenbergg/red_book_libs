@@ -1,5 +1,7 @@
 // attack.rs
 use crate::defs;
+use crate::board;
+use crate::validate;
 
 pub const KN_DIR: [i32; 8] = [ -8, -19,	-21, -12, 8, 19, 21, 12 ];
 pub const RK_DIR: [i32; 4] = [ -1, -10,	1, 10 ];
@@ -11,6 +13,9 @@ pub fn sq_attacked (sq: i32, side: i32, pos: *const defs::SBoard) -> i32 {
     let mut index: i32;
     let mut t_sq: i32;
     let mut dir: i32;
+    assert!(validate::sq_on_board(sq) == 1);
+    assert!(validate::side_valid(side) == 1);
+    assert!(board::check_board(pos) == 1);
     if side == (defs::Colors::White as i32) {
         unsafe {
             if ((*pos).pieces[(sq - 11) as usize] == (defs::Pieces::WP as i32)) || ((*pos).pieces[(sq - 9) as usize] == (defs::Pieces::WP as i32)) {

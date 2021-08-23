@@ -4,7 +4,8 @@ use crate::bitboards;
 pub const NAME: &str = "Red Book 1.0";
 pub const BRD_SQ_NUM: i32 = 120;
 pub const MAXGAMEMOVES: i32 = 2048;
-pub const START_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+pub const MAXPOSITIONMOVES: i32 = 256;
+pub const START_FEN: &'static str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 pub enum Pieces { EMPTY, WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK }
 pub enum File { FileA, FileB, FileC, FileD, FileE, FileF, FileG, FileH, FileNone }
@@ -27,9 +28,15 @@ pub enum TF { False, True }
 
 pub enum CastlePerm { WKCA = 1, WQCA = 2, BKCA = 4, BQCA = 8 }
 
+#[derive(Copy, Clone)]
 pub struct SMove {
     pub pc_move: i32,
     pub score: i32,
+}
+
+pub struct SMoveList {
+    pub moves: [SMove; MAXPOSITIONMOVES as usize],
+    pub count: i32,
 }
 
 pub struct SUndo {
@@ -168,3 +175,4 @@ pub static mut PIECE_KNIGHT: [i32; 13] = [ 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0
 pub static mut PIECE_KING: [i32; 13] = [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ];
 pub static mut PIECE_ROOK_QUEEN: [i32; 13] = [ 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0 ];
 pub static mut PIECE_BISHOP_QUEEN: [i32; 13] = [ 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0 ];
+pub static mut PIECE_SLIDES: [i32; 13] = [ 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 ];

@@ -52,3 +52,22 @@ pub fn pr_move(pc_move: i32) -> String {
     }
     mv_str
 }
+
+pub fn print_move_list(list: *const defs::SMoveList) {
+    let mut index: i32;
+    let mut score: i32;
+    let mut pc_move: i32;
+    unsafe {
+        println!("MoveList:");
+        index = 0;
+        while index < (*list).count {
+            pc_move = (*list).moves[index as usize].pc_move;
+            score = (*list).moves[index as usize].score;
+            println!("Move {} > {} (score: {})", index + 1, pr_move(pc_move), score);
+            index += 1;
+        }
+        println!("MoveList Total {} Moves:", (*list).count);
+        println!();
+    }
+    
+}
